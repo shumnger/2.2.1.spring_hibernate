@@ -1,10 +1,12 @@
 package hiber.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -25,8 +27,9 @@ public class User {
    @Column(name = "email")
    private String email;
 
-   @OneToOne
-   private Car car = null;
+   @OneToOne(cascade = CascadeType.ALL)
+   @JoinColumn(name = "id")
+   private Car car;
 
    public Car getCar() {
       return car;

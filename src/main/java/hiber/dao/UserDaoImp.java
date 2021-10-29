@@ -6,14 +6,15 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Repository
 public class UserDaoImp implements UserDao {
 
+   private final SessionFactory sessionFactory;
+
    @Autowired
-   private SessionFactory sessionFactory;
+   public UserDaoImp(SessionFactory sessionFactory) { this.sessionFactory = sessionFactory; }
 
    @Override
    public void add(User user) {
@@ -26,9 +27,7 @@ public class UserDaoImp implements UserDao {
    @Override
    @SuppressWarnings("unchecked")
    public List<User> listUsers() {
-      TypedQuery<User> query=sessionFactory
-              .getCurrentSession().createQuery("from User");
-      return query.getResultList();
+      return  sessionFactory.getCurrentSession().createQuery("FROM User").getResultList();
    }
    @Override
    public void add(Car car) {
@@ -37,20 +36,16 @@ public class UserDaoImp implements UserDao {
 
    @Override
    public List<Car> listCars() {
-      TypedQuery<Car> query = sessionFactory
-              .getCurrentSession().createQuery("from Car");
-      return query.getResultList();
+      return sessionFactory.getCurrentSession().createQuery("FROM Car").getResultList();
    }
 
    @Override
-   public User getUserByCar(String car_model, int car_series) {
-       TypedQuery<User> query = sessionFactory.getCurrentSession()
-               .createQuery("from User where car.model = :m and car.series = :s");
-       query.setParameter("m", car_model);
-       query.setParameter("s", car_series);
-       return query.getSingleResult();
+   public User getUserByCarModelAndSeries(String carModel, int carSeries) {
+        return sessionFactory.getCurrentSession()
+               .createQuery("from User where car.model = :model and car.series = :series",User.class)
+               .setParameter("model", carModel)
+               .setParameter("series", carSeries)
+               .getSingleResult();
    }
 
 }
-
-

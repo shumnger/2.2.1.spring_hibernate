@@ -35,7 +35,8 @@ public class MainApp {
          }
       }
       System.out.println("Найти хозяина bmw 3");
-      System.out.println(userService.getUserByCar("bmw", 3));
+      System.out.println(userService.getUserByCarModelAndSeries("bmw", 3));
+
 
       context.close();
    }
